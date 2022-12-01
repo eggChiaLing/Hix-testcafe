@@ -1,0 +1,14 @@
+{
+  // 使用 chrome 瀏覽器測試
+  "browsers": [
+    "chrome"
+  ],
+  // 測試執行速度
+  "speed": 0.9,
+  // 1 (最快) ~ 0.01 (最慢)
+  "concurrency": 1,
+  // 要跑的測試程式碼
+  "src": [
+    "tests"
+  ]
+}
