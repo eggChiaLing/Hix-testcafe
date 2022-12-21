@@ -48,26 +48,37 @@ const userAdmin = Role(`http://test.hixcare.tw/login/signIn`, async t => {
 
 // ? 系統用戶管理
 const sysUserButton = Selector('span').withText("系統用戶管理")
-// const userAButton = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol').textContent
 const userAButton = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol').child('li').nth(78).child('div').nth(0)
 // /html/body/div/div
 // /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol
 // /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[79]/div[1]
 // /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[220]
+
+
 const userAPasswordButton = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(0).child('div').nth(0).child('button').child('span')
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[2]/div[1]/div[1]/button/span
 const userANewPassword1 = Selector('html').child('body').child('div').nth(1).child('div').nth(0).child('div').child('div').child('div').child('div').child('div').nth(0).child('input')
 const userANewPassword2 = Selector('html').child('body').child('div').nth(1).child('div').nth(0).child('div').child('div').child('div').child('div').child('div').nth(1).child('input')
 const userANewPasswordOk = Selector('html').child('body').child('div').nth(1).child('div').nth(0).child('div').child('div').child('footer').child('div').child('button').nth(0)
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[2]/div[1]/div[1]/button/span
 // /html/body/div[2]/div[1]/div/div/div/div/div[1]/input
 // /html/body/div[2]/div[1]/div/div/div/div/div[2]/input
 // /html/body/div[2]/div[1]/div/div/footer/div/button[1]
-console.log('1', userAButton)
-for (let i = 0; i < 220; i++) {
-  if (i === 1) {
-    console.log(i)
-  }
-}
+
+
+// ? 寫迴圈查找
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[1]/div[1]
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[2]
+
+// /html/body/div/div
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[79]/div[1]
+// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[2]/div[1]
+const egg = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol').child('li').nth(1).child('div').nth(0)
+const baseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol')
+// console.log('eggeggegg', egg)
+// for (let i = 0; i < 220; i++) {
+//   console.log(i)
+// }
 
 // const isNodeOk = (node, idx, originNode) => {
 //   console.log({ node, idx, originNode });
@@ -91,11 +102,22 @@ test('登入改護理長密碼', async t => {
   // ? Hix登入操作
   await t.useRole(userAdmin)
   // ? 系統用戶管理 改密碼
-  await t
-    .click(sysUserButton)
-    .click(userAButton)
-    .click(userAPasswordButton)
-    .typeText(userANewPassword1, 'A369')
-    .typeText(userANewPassword2, 'A369')
-    .click(userANewPasswordOk)
+  // await t
+  //   .click(sysUserButton)
+  //   .click(userAButton)
+  //   .click(userAPasswordButton)
+  //   .typeText(userANewPassword1, 'A369')
+  //   .typeText(userANewPassword2, 'A369')
+  //   .click(userANewPasswordOk)
+  // ? 系統用戶管理 改密碼2
+  await t.click(sysUserButton)
+  // const user = await egg.innerText
+  const user = await egg.innerText
+  console.log('eggeggegg', user)
+  for (let i = 0; i < 220; i++) {
+    if (await baseDOM.child('li').nth(i).child('div').nth(0).innerText === 'A369') {
+      console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
+      console.log('1234')
+    }
+  }
 })

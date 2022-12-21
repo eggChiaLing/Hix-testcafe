@@ -91,35 +91,36 @@ console.log('sum1', sum1)
 fixture('護理長登入')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
 
-test('結帳交班表', async t => {
+// ! test.skip ＝ 跳過此測試區域指令
+test.skip('結帳交班表', async t => {
   // ? Hix登入操作
   await t.useRole(userA)
-  // 選日期區間
+  // 結帳交班表
   await t
     .click(receiptReportButton)
+    // 選日期區間
     .click(dateFromButton1)
     .click(dateFromButton2)
-  // 日期+時段+明細
-  await t
+    // 日期+時段+明細
     .click(Button)
-  // 日期+時段+時段加總
-  await t
+    .wait(1000)
+    // 日期+時段+時段加總
     .click(groupRule32)
     .click(Button)
-  // 不設定+明細
-  await t
+    .wait(1000)
+    // 不設定+明細
     .click(groupRule1)
     .click(Button)
-  // 日期+明細
-  await t
+    .wait(1000)
+    // 日期+明細
     .click(groupRule2)
     .click(Button)
-  // 日期+日期加總
-  await t
+    .wait(1000)
+    // 日期+日期加總
     .click(groupRule22)
     .click(Button)
-  // 日期+人員加總
-  await t
+    .wait(1000)
+    // 日期+人員加總
     .click(groupRule23)
     .click(Button)
 })
