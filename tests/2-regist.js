@@ -79,6 +79,7 @@ fixture('掛號操作')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
 
 // ? 要測試動作指令 .navigateTo('') .pressKey('delete') .typeText(userPassword, 'Hix1234')
+// ! test.skip 跳過此測試區域指令
 test.skip('掛號-新病人', async t => {
   // ? Hix登入操作
   await t.useRole(userA)

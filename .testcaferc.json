@@ -4,11 +4,11 @@
     "chrome"
   ],
   // 測試執行速度
-  "speed": 0.9,
+  "speed": 0.8,
   // 1 (最快) ~ 0.01 (最慢)
   "concurrency": 1,
   // 要跑的測試程式碼
   "src": [
-    "tests"
+    "tests1"
   ]
 }
