@@ -64,34 +64,8 @@ const userANewPasswordOk = Selector('html').child('body').child('div').nth(1).ch
 // /html/body/div[2]/div[1]/div/div/div/div/div[2]/input
 // /html/body/div[2]/div[1]/div/div/footer/div/button[1]
 
-
 // ? 寫迴圈查找
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[1]/div[1]
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[2]
-
-// /html/body/div/div
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[79]/div[1]
-// /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div/div[1]/div[2]/ol/li[2]/div[1]
-const egg = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol').child('li').nth(1).child('div').nth(0)
 const baseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').nth(1).child('ol')
-// console.log('eggeggegg', egg)
-// for (let i = 0; i < 220; i++) {
-//   console.log(i)
-// }
-
-// const isNodeOk = (node, idx, originNode) => {
-//   console.log({ node, idx, originNode });
-//   return idx === 6;
-// };
-
-// const filteredDiv = userAButton.prevSibling((node) => {
-//   console.log(node)
-//   // return !isNaN(node.textContent);
-// }, { isNodeOk });
-
-// console.log('2', filteredDiv)
-
 
 fixture('Admin登入改Users密碼')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
@@ -111,13 +85,20 @@ test('登入改護理長密碼', async t => {
   //   .click(userANewPasswordOk)
   // ? 系統用戶管理 改密碼2
   await t.click(sysUserButton)
-  // const user = await egg.innerText
-  const user = await egg.innerText
-  console.log('eggeggegg', user)
-  for (let i = 0; i < 220; i++) {
+  let i = 0
+  while (i < 220) {
+    console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
     if (await baseDOM.child('li').nth(i).child('div').nth(0).innerText === 'A369') {
-      console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
-      console.log('1234')
+      const userAButton123 = await baseDOM.child('li').nth(i).child('div').nth(0)
+      console.log('1234123412341234123412341234123412341234')
+      await t
+        .click(userAButton123)
+        .click(userAPasswordButton)
+        .typeText(userANewPassword1, 'A369')
+        .typeText(userANewPassword2, 'A369')
+        .click(userANewPasswordOk)
+      i = 220
     }
+    i++
   }
 })

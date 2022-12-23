@@ -92,7 +92,8 @@ fixture('護理長登入')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
 
 // ! test.skip ＝ 跳過此測試區域指令
-test.skip('結帳交班表', async t => {
+// ! .wait(1000)
+test('結帳交班表', async t => {
   // ? Hix登入操作
   await t.useRole(userA)
   // 結帳交班表
