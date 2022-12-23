@@ -72,7 +72,7 @@ fixture('Admin登入改Users密碼')
 
 // ? 要測試動作指令 .navigateTo('') .pressKey('delete') .typeText(userPassword, 'Hix1234')
 // ! test.skip ＝ 跳過此測試區域指令
-test('登入改護理長密碼', async t => {
+test.skip('登入改護理長密碼', async t => {
   // ? Hix登入操作
   await t.useRole(userAdmin)
   // ? 系統用戶管理 改密碼
@@ -87,7 +87,7 @@ test('登入改護理長密碼', async t => {
   await t.click(sysUserButton)
   let i = 0
   while (i < 220) {
-    console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
+    // console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
     if (await baseDOM.child('li').nth(i).child('div').nth(0).innerText === 'A369') {
       const userAButton123 = await baseDOM.child('li').nth(i).child('div').nth(0)
       console.log('1234123412341234123412341234123412341234')

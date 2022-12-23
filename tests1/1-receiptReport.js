@@ -1,5 +1,8 @@
 // ! testcafe --speed 0.8 chrome hix.js --live
 import { Selector, Role } from 'testcafe'
+import receiptReport2API from '../2-api'
+
+console.log('結帳交班表', receiptReport2API)
 
 // ? Hix登入操作 hixadmin / Hix1234
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[1]/input 使用者名稱
@@ -48,6 +51,7 @@ const userA = Role('http://test.hixcare.tw/login/signIn', async t => {
 const receiptReportButton = Selector('span').withText("結帳交班表")
 // /html/body/div/div
 const dateFromButton1 = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(0).child('div').nth(1).child('div').child('label')
+// /html/body/div[1]/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[1]/div[2]/div/div/div/div/div[2]/div[3]/div[4]/div[5]/span/font/font
 const dateFromButton2 = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(0).child('div').nth(1).child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(2).child('div').nth(3).child('div').nth(2).child('span')
 // /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[1]/div[2]/div/label
 // /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[1]/div[2]/div/div/div/div/div[2]/div[3]/div[4]/div[3]/span
@@ -82,11 +86,19 @@ const Button = Selector('#app').child('div').child('div').nth(2).child('div').ch
 const sumBaseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1)
 const sum1 = sumBaseDOM.child('div').child('div').child('table').nth(3).child('tbody').child('tr').child('td').nth(2).child('span').nth(4).innerText
 console.log('sum1', sum1)
+
+
 //? 掛號小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
 //? 押金小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
 //? 門診小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[6]/tbody/tr/td[3]/span[5]
 //? 自費小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[8]/tbody/tr/td[3]/span[5]
 //? 總計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[9]/tbody/tr[5]/td[9]/span
+const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div')
+const reportReportItemSummary = baseTotalDOM.child('table').nth(1).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
+const receiptDepositItemSummary = baseTotalDOM.child('table').nth(3).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
+const receiptSelfBehalfItemSummary = baseTotalDOM.child('table').nth(5).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
+const ecReportItemSummary = baseTotalDOM.child('table').nth(7).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
+const totalReceiptSummary = baseTotalDOM.child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span')
 
 fixture('護理長登入')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
@@ -96,32 +108,47 @@ fixture('護理長登入')
 test('結帳交班表', async t => {
   // ? Hix登入操作
   await t.useRole(userA)
-  // 結帳交班表
   await t
+    // 結帳交班表
     .click(receiptReportButton)
     // 選日期區間
     .click(dateFromButton1)
+    // 日期 12/20-當日
     .click(dateFromButton2)
     // 日期+時段+明細
-    .click(Button)
-    .wait(1000)
+    // .click(Button)
+    // .wait(1000)
     // 日期+時段+時段加總
-    .click(groupRule32)
-    .click(Button)
-    .wait(1000)
+    // .click(groupRule32)
+    // .click(Button)
+    // .wait(1000)
     // 不設定+明細
     .click(groupRule1)
     .click(Button)
     .wait(1000)
+  // 取 API回傳值
+  const get = await receiptReport2API()
+  console.log('get', get)
+  // 取 畫面小計、總計
+  const reportReportTotal = await reportReportItemSummary.innerText
+  const receiptDepositTotal = await receiptDepositItemSummary.innerText
+  const receiptSelfBehalfTotal = await receiptSelfBehalfItemSummary.innerText
+  const ecReportTotal = await ecReportItemSummary.innerText
+  const totalReceipt = await totalReceiptSummary.innerText
+  console.log('取小計、總計', reportReportTotal)
+  console.log('取小計、總計', receiptDepositTotal)
+  console.log('取小計、總計', receiptSelfBehalfTotal)
+  console.log('取小計、總計', ecReportTotal)
+  console.log('取小計、總計', totalReceipt)
     // 日期+明細
-    .click(groupRule2)
-    .click(Button)
-    .wait(1000)
+    // .click(groupRule2)
+    // .click(Button)
+    // .wait(1000)
     // 日期+日期加總
-    .click(groupRule22)
-    .click(Button)
-    .wait(1000)
+    // .click(groupRule22)
+    // .click(Button)
+    // .wait(1000)
     // 日期+人員加總
-    .click(groupRule23)
-    .click(Button)
+    // .click(groupRule23)
+    // .click(Button)
 })
