@@ -25,6 +25,7 @@ test('HelloWorld test', async t => { // 一個測試案例
 // testcafe -r spec,json:report.json 指定 2種 測試報告格式
 // testcafe -S -s screenshots 設定只有失敗時才截圖
 // ! testcafe --debug-on-fail 測試有錯誤時才啟動
+// ? testcafe chrome:headless --debug-on-fail 不需要看 UI直接跑測試
 // testcafe --speed 0.8 chrome hix.js --live 設定速度
 
 // 1.用 Selectors 取得網頁上的 element，例如按鈕、文字方塊等。

@@ -90,7 +90,7 @@ test.skip('登入改護理長密碼', async t => {
     // console.log(await baseDOM.child('li').nth(i).child('div').nth(0).innerText)
     if (await baseDOM.child('li').nth(i).child('div').nth(0).innerText === 'A369') {
       const userAButton123 = await baseDOM.child('li').nth(i).child('div').nth(0)
-      console.log('1234123412341234123412341234123412341234')
+      console.log('改密碼---OK')
       await t
         .click(userAButton123)
         .click(userAPasswordButton)
