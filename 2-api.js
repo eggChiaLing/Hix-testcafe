@@ -53,8 +53,17 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
         console.log('時段加總 資料', dateShiftData[0].detail[0].totalReceiptSummary.amount)
         console.log('時段加總 資料', dateShiftData[0].detail[1].totalReceiptSummary.amount)
         console.log('時段加總 資料', dateShiftData[0].detail[2].totalReceiptSummary.amount)
+        console.log('時段加總 資料', dateShiftData[0].detail[0].dateInfo.date)
+        console.log('時段加總 資料', dateShiftData[0].summary.amount)
         // console.log('時段加總 期間的總計', dateShiftSummaryTotal)
-        if (dateShiftSummaryTotal.length === 1) return dateShiftSummaryTotal[0]
+        if (dateShiftSummaryTotal.length === 1) return {
+          dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
+          dateInfo2: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
+          dateInfo3: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
+          dateInfo5: dateShiftData[0].detail[0].dateInfo.date,
+          dateInfo6: moneyFormat(dateShiftData[0].summary.amount),
+          dateInfo7: moneyFormat(dateShiftSummaryTotal[0].amount)
+        }
         const sum = dateShiftSummaryTotal.reduce((acc, curr) => {
           return [{
             amount: acc[0].amount + curr.amount,
@@ -79,7 +88,14 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
           selfFee: 0
         }])
         console.warn('總計', sum[0])
-        return sum[0]
+        return {
+          dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
+          dateInfo2: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
+          dateInfo3: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
+          dateInfo5: moneyFormat(dateShiftData[0].detail[0].dateInfo.date),
+          dateInfo6: moneyFormat(dateShiftData[0].summary.amount),
+          dateInfo7: moneyFormat(sum[0].amount)
+        } 
       }
 
       // console.log('明細', printData[0])

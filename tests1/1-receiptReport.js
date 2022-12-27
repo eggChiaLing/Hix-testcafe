@@ -117,18 +117,11 @@ dataSet.forEach((data, index) => {
     if (showGroupRuleValue === "時段加總") {
       const get = await receiptReport2API(accountingShiftIds, groupRuleValue, showGroupRuleValue)
       console.log('get', get)
+      // TODO: 抓 上午小計......
       // 取 畫面小計、總計
       // console.log('【掛號批價】', await reportReportItemSummary.innerText)
-      // console.log('【押金】', await receiptDepositItemSummary.innerText)
-      // console.log('【門診自費/代收】', await receiptSelfBehalfItemSummary.innerText)
-      // console.log('【自費購物】', await ecReportItemSummary.innerText)
-      // console.log('實收合計', await totalReceiptSummary.innerText)
       // TODO: 9-比對 預覽的合計＆小計值與 API 回傳值
       // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
-      // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
-      // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
-      // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
-      // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     }
     // ? 8-丟參數給API
     if (showGroupRuleValue === "明細") {
