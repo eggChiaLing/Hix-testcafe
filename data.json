@@ -1,17 +1,74 @@
 [
   {
-    "name": "結帳交班表--不設定+明細--不設定",
+    "name": "結帳交班表--不設定--明細",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
     "groupRuleIndex": 0,
     "groupRuleValue": "null"
   },
   {
-    "name": "結帳交班表--不設定+明細--日期",
+    "name": "結帳交班表--日期--明細",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
     "groupRuleIndex": 1,
     "groupRuleValue": "DATE"
   },
   {
-    "name": "結帳交班表--不設定+明細--日期+時段",
+    "name": "結帳交班表--日期+時段--明細",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
     "groupRuleIndex": 2,
     "groupRuleValue": "DATE_SHIFT"
+  },
+  {
+    "name": "結帳交班表--日期+時段--時段加總",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 1,
+    "showGroupRuleValue": "時段加總",
+    "groupRuleIndex": 2,
+    "groupRuleValue": "DATE_SHIFT"
+  },
+  {
+    "name": "結帳交班表--日期--日期加總",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 1,
+    "showGroupRuleValue": "日期加總",
+    "groupRuleIndex": 1,
+    "groupRuleValue": "DATE"
+  },
+  {
+    "name": "結帳交班表--日期--人員加總",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 2,
+    "showGroupRuleValue": "人員加總",
+    "groupRuleIndex": 1,
+    "groupRuleValue": "DATE"
   }
 ]
