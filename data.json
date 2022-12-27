@@ -1,0 +1,17 @@
+[
+  {
+    "name": "結帳交班表--不設定+明細--不設定",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定+明細--日期",
+    "groupRuleIndex": 1,
+    "groupRuleValue": "DATE"
+  },
+  {
+    "name": "結帳交班表--不設定+明細--日期+時段",
+    "groupRuleIndex": 2,
+    "groupRuleValue": "DATE_SHIFT"
+  }
+]
