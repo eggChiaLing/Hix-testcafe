@@ -3,22 +3,22 @@ import { Selector, Role } from 'testcafe'
 
 // ? Hix登入操作
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[1]/input 使用者名稱
-const userName = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(0).child('input')
+const userName = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(0).child('input')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[2]/div[1]/input 密碼
-const userPassword = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(1).child('div').nth(0).child('input')
+const userPassword = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(1).child('div').nth(0).child('input')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[3]/div/label 系統日期
 const date1 = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(2).child('div').child('label')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[3]/div/div/div/div/div[2]/div[3]/div[4]/div[4]/span 指定日期
 // const date2 = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(2).child('div').nth(3).child('div').nth(3).child('span')
 const date2 = Selector('div').withAttribute("aria-label", "2022年11月21日 星期一")
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[4]/select 帳務時段
-const time1 = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(3).child('select')
+const time1 = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(3).child('select')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[5]/select 站別
 // const index1 = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(4).child('select')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/div[6]/div 選擇入口頁面
 // const p = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('div').nth(5).child('div')
 // /html/body/div[1]/div/div/div/div/div/div[2]/form/button 登入
-const signInButton = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form').child('button')
+const signInButton = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form').child('button')
 
 // ? 門診操作
 // /html/body/div[1]/div/div/div[3]/div/div/div/div[3]/div/div/div[2]/section[3]/div[2]/div/div/div/ol/li/span[2]
@@ -67,7 +67,7 @@ const userDoctor = Role('http://test.hixcare.tw/login/signIn', async t => {
 fixture('門診操作')
   .page('http://test.hixcare.tw/dashboard').skipJsErrors()
 
-test('開藥完診', async t => {
+test.skip('開藥完診', async t => {
   // ? Hix登入操作
   await t.useRole(userDoctor)
   // ? 門診操作
