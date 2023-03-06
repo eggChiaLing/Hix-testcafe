@@ -1,5 +1,14 @@
 const axios = require('axios');
 
+const today = new Date();
+const year = today.getFullYear();
+const month = ('0' + (today.getMonth() + 1)).slice(-2);
+const day = ('0' + today.getDate()).slice(-2);
+const formattedDate = year + '-' + month + '-' + day;
+// 取 今天的日期
+console.log(formattedDate);
+
+
 // console.log('axios', axios.isCancel('something'));
 const baseURL = 'http://test.hixcare.tw/hixLocal'
 let listPTUsersId = []
@@ -29,9 +38,9 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
       data: {
         accountingShiftIds,
         counterUserIds,
-        printDate: "2022-12-27",
-        dateFrom: "2022-12-20",
-        dateTo: "2022-12-27",
+        printDate: "2023-02-10",
+        dateFrom: "2023-02-06",
+        dateTo: formattedDate,
         groupRule
       }
     })

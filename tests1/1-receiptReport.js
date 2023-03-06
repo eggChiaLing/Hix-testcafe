@@ -1,8 +1,8 @@
 import { Selector, Role } from 'testcafe'
-import receiptReport2API from '../2-api'
+import receiptReportAPI from '../receiptReportAPI'
 const dataSet = require("../data.json")
 // console.log('結帳交班表', dataSet)
-// console.log('結帳交班表', receiptReport2API)
+console.log('結帳交班表 receiptReportAPI', receiptReportAPI)
 
 // ? Hix登入操作 名稱＆密碼＆登入 hixadmin / Hix1234
 const signInBasicDOM = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form')
