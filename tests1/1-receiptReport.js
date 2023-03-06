@@ -1,4 +1,3 @@
-// ! testcafe --speed 0.8 chrome hix.js --live
 import { Selector, Role } from 'testcafe'
 import receiptReport2API from '../2-api'
 const dataSet = require("../data.json")
@@ -6,7 +5,7 @@ const dataSet = require("../data.json")
 // console.log('結帳交班表', receiptReport2API)
 
 // ? Hix登入操作 名稱＆密碼＆登入 hixadmin / Hix1234
-const signInBasicDOM = Selector('#app').child('div').child('div').child('div').child('div').child('div').nth(1).child('form')
+const signInBasicDOM = Selector('#app').child('div').child('div').child('div').child('div').nth(1).child('form')
 const userName = signInBasicDOM.child('div').nth(0).child('input')
 const userPassword = signInBasicDOM.child('div').nth(1).child('div').nth(0).child('input')
 const signInButton = signInBasicDOM.child('button')
@@ -33,7 +32,10 @@ const receiptReportButton = Selector('span').withText("結帳交班表")
 // ? 開始＆結束日期
 const dateFromBasicDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(0).child('div').nth(1).child('div')
 const dateFromButton = dateFromBasicDOM.child('label')
-const dateFromValue = dateFromBasicDOM.child('div').child('div').child('div').child('div').nth(1).child('div').nth(2).child('div').nth(3).child('div').nth(2).child('span')
+//! 0-6 (日到六) (第三週)
+// const dateFromValue = dateFromBasicDOM.child('div').child('div').child('div').child('div').nth(1).child('div').nth(2).child('div').nth(3).child('div').nth(2).child('span')
+//! 0-6 (日到六) (第二週)
+const dateFromValue = dateFromBasicDOM.child('div').child('div').child('div').child('div').nth(1).child('div').nth(2).child('div').nth(1).child('div').nth(1).child('span')
 
 // ? 資料群組
 const baseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(5).child('div').nth(1).child('div')
