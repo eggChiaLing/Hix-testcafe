@@ -1,6 +1,8 @@
 [
   {
-    "name": "結帳交班表--不設定--明細",
+    "name": "結帳交班表--不設定--明細ALL",
+    "dateFromNumber": "6",
+    "accountingShiftIndex": -1,
     "accountingShiftIds": [
       "AM",
       "PM",
@@ -12,7 +14,9 @@
     "groupRuleValue": "null"
   },
   {
-    "name": "結帳交班表--不設定--明細",
+    "name": "結帳交班表--不設定--明細AM",
+    "dateFromNumber": "2",
+    "accountingShiftIndex": 0,
     "accountingShiftIds": [
       "AM"
     ],
@@ -22,7 +26,9 @@
     "groupRuleValue": "null"
   },
   {
-    "name": "結帳交班表--不設定--明細",
+    "name": "結帳交班表--不設定--明細PM",
+    "dateFromNumber": "6",
+    "accountingShiftIndex": 1,
     "accountingShiftIds": [
       "PM"
     ],
@@ -32,7 +38,9 @@
     "groupRuleValue": "null"
   },
   {
-    "name": "結帳交班表--不設定--明細",
+    "name": "結帳交班表--不設定--明細EVE",
+    "dateFromNumber": "6",
+    "accountingShiftIndex": 2,
     "accountingShiftIds": [
       "EVENING"
     ],

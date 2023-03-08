@@ -1,15 +1,12 @@
-const axios = require('axios');
+const axios = require('axios')
 
-const today = new Date();
-const year = today.getFullYear();
-const month = ('0' + (today.getMonth() + 1)).slice(-2);
-const day = ('0' + today.getDate()).slice(-2);
-const formattedDate = year + '-' + month + '-' + day;
-// 取 今天的日期
-console.log(formattedDate);
+const today = new Date()
+const year = today.getFullYear()
+const month = ('0' + (today.getMonth() + 1)).slice(-2)
+const day = ('0' + today.getDate()).slice(-2)
+const formattedDate = year + '-' + month + '-' + day
+console.log('今天的日期', formattedDate, month)
 
-
-// console.log('axios', axios.isCancel('something'));
 const baseURL = 'http://test.hixcare.tw/hixLocal'
 let listPTUsersId = []
 let listCounterUsersId = []
@@ -21,11 +18,12 @@ getListPTUsers()
 listCounterUser()
 
 // 取 結帳教班表 資料
-async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue) {
+async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue) {
   try {
     counterUserIds = [...listPTUsersId, ...listCounterUsersId]
     // console.log('counterUserIds', counterUserIds)
-    console.log('---API---資料群組----', accountingShiftIds, groupRule, showGroupRuleValue)
+    // console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
+    const dateFromDay = dateFromNumber.length === 1 ? `0${dateFromNumber}` : dateFromNumber
     const dateShiftData = []
     const printData = []
     const dateShiftSummaryTotal = []
@@ -38,8 +36,8 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
       data: {
         accountingShiftIds,
         counterUserIds,
-        printDate: "2023-02-10",
-        dateFrom: "2023-02-06",
+        printDate: formattedDate,
+        dateFrom: year + '-' + month + '-' + dateFromDay,
         dateTo: formattedDate,
         groupRule
       }
@@ -59,11 +57,11 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
       }
 
       if (showGroupRuleValue === '時段加總') {
-        console.log('時段加總 資料', dateShiftData[0].detail[0].totalReceiptSummary.amount)
-        console.log('時段加總 資料', dateShiftData[0].detail[1].totalReceiptSummary.amount)
-        console.log('時段加總 資料', dateShiftData[0].detail[2].totalReceiptSummary.amount)
-        console.log('時段加總 資料', dateShiftData[0].detail[0].dateInfo.date)
-        console.log('時段加總 資料', dateShiftData[0].summary.amount)
+        // console.log('時段加總 資料', dateShiftData[0].detail[0].totalReceiptSummary.amount)
+        // console.log('時段加總 資料', dateShiftData[0].detail[1].totalReceiptSummary.amount)
+        // console.log('時段加總 資料', dateShiftData[0].detail[2].totalReceiptSummary.amount)
+        // console.log('時段加總 資料', dateShiftData[0].detail[0].dateInfo.date)
+        // console.log('時段加總 資料', dateShiftData[0].summary.amount)
         // console.log('時段加總 期間的總計', dateShiftSummaryTotal)
         if (dateShiftSummaryTotal.length === 1) return {
           dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
@@ -96,7 +94,7 @@ async function receiptReport2(accountingShiftIds, groupRule, showGroupRuleValue)
           registFee4NhiPT: 0,
           selfFee: 0
         }])
-        console.warn('總計', sum[0])
+        // console.warn('總計', sum[0])
         return {
           dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
           dateInfo2: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
