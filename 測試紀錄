@@ -5,7 +5,8 @@ testcafe --speed 0.8 chrome hix.js --live
 1-設定檔位置：
 .testcaferc.json
 2-執行指令：
-testcafe --speed 0.8
+testcafe
+testcafe --debug-on-fail 測試有錯誤時才啟動
 
 屬性：
 browsers => 指定要在哪些浏览器上运行测试
@@ -14,8 +15,22 @@ concurrency => 指定并发测试的最大数量
 src => 指定要运行的测试文件或目录(test1資料夾)
 -------------------------------------------------------------------------------
 指令：
+fixture().page() => 
+skipJsErrors() => 略過js錯誤訊息
+Role() => 角色管理
+
+測試指令：
 test.skip => 跳過 此測試區域
+test.only => 只做 此測試區域
 .wait(2000) => 停頓2秒
+
+console.log(await DOM.innerText)
+const Eight = Selector('span').withExactText('8')
+
+驗證結果指令：
+.navigateTo('') => 
+.pressKey('delete') => 
+.typeText(userPassword, 'Hix1234') => 
 -------------------------------------------------------------------------------
 tests: 主要測試區
 0-userNewPassword(改密碼)
@@ -27,7 +42,17 @@ receiptReportAPI(結帳交班表)
 ??()
 -------------------------------------------------------------------------------
 測試引入參數：
-data.json(結帳交班表/測試用的參數)
+data.json(結帳交班表/測試用的參數/全部)
+
+dataNull.json(結帳交班表/不設定/明細)(ALL/AM/PM/EVENING)
+name  => 測試項目名稱 ''
+dateFromNumber  => DOM位置 & API 開始日期 ''
+accountingShiftIndex  => DOM位置 時段 0
+accountingShiftIds  => API 時段 []
+showGroupRuleIndex  => DOM位置 顯示方式 0
+showGroupRuleValue  => API 顯示方式 ''
+groupRuleIndex  => DOM位置 資料群組 0
+groupRuleValue  => API 資料群組 ''
 
 ??()
 ??()
