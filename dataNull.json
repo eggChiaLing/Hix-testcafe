@@ -1,0 +1,44 @@
+[
+  {
+    "name": "結帳交班表--不設定--明細",
+    "accountingShiftIds": [
+      "AM",
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細",
+    "accountingShiftIds": [
+      "AM"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細",
+    "accountingShiftIds": [
+      "PM"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細",
+    "accountingShiftIds": [
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  }
+]
