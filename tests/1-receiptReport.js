@@ -60,8 +60,8 @@ fixture('進入結帳交班表')
 //! 使用 data資料帶動測試
 dataSet.forEach((data, index) => {
   // 取得 每筆測試資料
-  const { name, dateFromNumber, accountingShiftIndex, accountingShiftIds, groupRuleIndex, groupRuleValue, showGroupRuleIndex, showGroupRuleValue } = data
-  console.log(index, name, dateFromNumber, accountingShiftIndex, accountingShiftIds, groupRuleIndex, groupRuleValue, showGroupRuleIndex, showGroupRuleValue)
+  const { name, dateFromNumber, accountingShiftTestStatus, accountingShiftIndex, accountingShiftIds, groupRuleIndex, groupRuleValue, showGroupRuleIndex, showGroupRuleValue } = data
+  console.log(index, name, dateFromNumber, accountingShiftTestStatus, accountingShiftIndex, accountingShiftIds, groupRuleIndex, groupRuleValue, showGroupRuleIndex, showGroupRuleValue)
   // 指定日期
   const dateFromValue = Selector('span').withExactText(dateFromNumber)
   // 取得 時段別 陣列 DOM
@@ -79,10 +79,14 @@ dataSet.forEach((data, index) => {
       .click(receiptReportButton) // 進入結帳交班表
       .click(dateFromButton) // 點開日期
       .click(dateFromValue) // 指定日期 動態點選
-    if (accountingShiftIndex >= 0) {
+    if (accountingShiftTestStatus === "alone") {
       await t
         .click(shiftAllDOM) // 取消全選
         .click(shiftDOM) // 選時段 動態點選
+      console.log('12333333', await shiftDOM.innerText)
+    }
+    if (accountingShiftTestStatus === "diverse") {
+      await t.click(shiftDOM) // 選時段 動態點選
     }
     await t
       .click(groupRule) // 資料群組 動態點選

@@ -2,6 +2,7 @@
   {
     "name": "結帳交班表--不設定--明細ALL",
     "dateFromNumber": "6",
+    "accountingShiftTestStatus": "all",
     "accountingShiftIndex": -1,
     "accountingShiftIds": [
       "AM",
@@ -16,6 +17,7 @@
   {
     "name": "結帳交班表--不設定--明細AM",
     "dateFromNumber": "2",
+    "accountingShiftTestStatus": "alone",
     "accountingShiftIndex": 0,
     "accountingShiftIds": [
       "AM"
@@ -28,6 +30,7 @@
   {
     "name": "結帳交班表--不設定--明細PM",
     "dateFromNumber": "6",
+    "accountingShiftTestStatus": "alone",
     "accountingShiftIndex": 1,
     "accountingShiftIds": [
       "PM"
@@ -38,11 +41,54 @@
     "groupRuleValue": "null"
   },
   {
-    "name": "結帳交班表--不設定--明細EVE",
+    "name": "結帳交班表--不設定--明細EVENING",
     "dateFromNumber": "6",
+    "accountingShiftTestStatus": "alone",
     "accountingShiftIndex": 2,
     "accountingShiftIds": [
       "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細PM+EVENING",
+    "dateFromNumber": "4",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 0,
+    "accountingShiftIds": [
+      "PM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細AM+EVENING",
+    "dateFromNumber": "6",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 1,
+    "accountingShiftIds": [
+      "AM",
+      "EVENING"
+    ],
+    "showGroupRuleIndex": 0,
+    "showGroupRuleValue": "明細",
+    "groupRuleIndex": 0,
+    "groupRuleValue": "null"
+  },
+  {
+    "name": "結帳交班表--不設定--明細AM+PM",
+    "dateFromNumber": "7",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 2,
+    "accountingShiftIds": [
+      "AM",
+      "PM"
     ],
     "showGroupRuleIndex": 0,
     "showGroupRuleValue": "明細",
