@@ -1,7 +1,7 @@
 import { Selector, Role } from 'testcafe'
 import receiptReportAPI from '../receiptReportAPI'
 // 參數資料 dataNull
-const dataSet = require("../dataNullAccountingShiftIndex.json")
+const dataSet = require("../dataNull3.json")
 // console.log('結帳交班表', dataSet)
 // console.log('結帳交班表 receiptReportAPI', receiptReportAPI)
 

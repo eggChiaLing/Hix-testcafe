@@ -1,0 +1,38 @@
+[
+  {
+    "name": "ALL",
+    "accountingShiftTestStatus": "all",
+    "accountingShiftIndex": -1
+  },
+  {
+    "name": "AM",
+    "accountingShiftTestStatus": "alone",
+    "accountingShiftIndex": 0
+  },
+  {
+    "name": "PM",
+    "accountingShiftTestStatus": "alone",
+    "accountingShiftIndex": 1
+  },
+  {
+    "name": "EVENING",
+    "accountingShiftTestStatus": "alone",
+    "accountingShiftIndex": 2
+  },
+  {
+    "name": "PM+EVENING",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 0
+  },
+  {
+    "name": "AM+EVENING",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 1
+  },
+  {
+    "name": "AM+PM",
+    "dateFromNumber": "7",
+    "accountingShiftTestStatus": "diverse",
+    "accountingShiftIndex": 2
+  }
+]
