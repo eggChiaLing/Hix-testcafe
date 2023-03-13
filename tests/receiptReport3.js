@@ -34,6 +34,7 @@ const dateFromBasicDOM = Selector('#app').child('div').child('div').nth(2).child
 const dateFromButton = dateFromBasicDOM.child('label')
 // ? 時段別
 const accountingShiftDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(2).child('div').nth(1)
+const shiftAllDOM = accountingShiftDOM.child('div').nth(0).child('label') // 時段全選
 // ?! 櫃位＆人員
 // ? 資料群組
 const baseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(5).child('div').nth(1).child('div')
@@ -54,88 +55,146 @@ const receiptSelfBehalfItemSummary = baseTotalDOM.child('table').nth(5).child('t
 const ecReportItemSummary = baseTotalDOM.child('table').nth(7).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
 const totalReceiptSummary = baseTotalDOM.child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span')
 
-// API參數控制
-const dateFromNumber = "8" // 指定日期
-// let accountingShiftIndex = -1 // 時段
+// API參數 ＆ DOM位置控制
+const dateFromNumber = "10" // 指定日期
+const dateFromValue = Selector('span').withExactText(dateFromNumber) // 日期 DOM 位置
 const accountingShift = [ "AM", "PM", "EVENING" ]
-const groupRuleIndex = 0 // 資料群組
 const groupRuleValue = [ "null", "DATE", "DATE_SHIFT" ]
-const showGroupRuleIndex = 0 // 顯示方式
 const showGroupRuleValue = "明細"
-// const accountingShiftTestStatus = "alone"
 
-// DOM
-// const dateFromValue = Selector('span').withExactText(dateFromNumber) // 日期
-// const shiftAllDOM = accountingShiftDOM.child('div').nth(0).child('label') // 時段全選
-// const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
-// const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
-// const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
-
-fixture('進入結帳交班表')
+fixture('結帳交班表')
 .page('http://test.hixcare.tw/dashboard').skipJsErrors()
-
-// while (accountingShiftIndex < 3) {
-//   console.log('accountingShiftIndex', accountingShiftIndex)
-//   accountingShiftIndex++
-// }
-
-//! 使用 data資料帶動測試
-dataSet.forEach((data, index) => {
-  // 取得 每筆測試資料
-  const { name, accountingShiftTestStatus, accountingShiftIndex } = data
-  console.log(index, name, dateFromNumber, accountingShiftTestStatus, accountingShiftIndex, groupRuleIndex, groupRuleValue[groupRuleIndex], showGroupRuleIndex, showGroupRuleValue)
-  const dateFromValue = Selector('span').withExactText(dateFromNumber)
-  const shiftAllDOM = accountingShiftDOM.child('div').nth(0).child('label') // 時段全選
-  const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
-  const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
-  const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
-
-  const accountingShiftIds = accountingShift.filter(i => {
-    if (accountingShiftTestStatus === "alone") {
-      return i === accountingShift[accountingShiftIndex]
-    }
-    return i !== accountingShift[accountingShiftIndex]
-  })
-
-  // ! test.skip ＝ 跳過此測試區域指令
-  test(`結帳交班表--不設定--明細: all`, async t => {
-    await t.useRole(userA) // 護理長登入
+  .beforeEach(async t => {
     await t
+      .useRole(userA) // 護理長登入
       .click(receiptReportButton) // 進入結帳交班表
       .click(dateFromButton) // 點開日期
       .click(dateFromValue) // 指定日期 動態點選
-    if (accountingShiftTestStatus === "alone") {
+  })
+  .afterEach(async t => {
+    console.log('------功能OK-----')
+  })
+  .before(async t => {
+    console.log('------開始-----')
+  })
+  .after(async t => {
+    console.log('------結束-----')
+  })
+  
+// ! test.skip only＝ 跳過此測試區域指令
+test(`時段全選`, async t => {
+  const accountingShiftIndex = -1 // 時段 DOM
+  const groupRuleIndex = 0 // 資料群組
+  const showGroupRuleIndex = 0 // 顯示方式
+  // const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
+  const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
+  const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+  const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+  await t
+    .click(groupRule) // 資料群組 動態點選
+    .click(showGroupRule) // 明細
+    .click(Button) // 預覽
+    .wait(500)
+  await t.click(Button) // 預覽
+  // API
+  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+  // console.log('accountingShiftIndex', accountingShiftIndex, 'API參數', await shiftDOM.innerText, accountingShiftIds, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
+  // 比對 預覽的合計＆小計值與 API 回傳值
+  await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+  await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+  await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+  await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+  await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+})
+
+test(`時段單選`, async t => {
+  let accountingShiftIndex = 0 // 時段 DOM
+  const groupRuleIndex = 0 // 資料群組
+  const showGroupRuleIndex = 0 // 顯示方式
+  while (accountingShiftIndex < 3) {
+    const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
+    const accountingShiftIds = accountingShift.filter(i => i === accountingShift[accountingShiftIndex])
+    const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+    const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+    if (accountingShiftIndex > 0) {
       await t
+        .click(shiftAllDOM) // 全選
         .click(shiftAllDOM) // 取消全選
-        .click(shiftDOM) // 選時段 動態點選
-      console.log('12333333', await shiftDOM.innerText)
+        .click(shiftDOM) // 選時段 動態點選 下午、晚上
+      } else {
+        await t
+        .click(shiftAllDOM) // 取消全選
+        .click(shiftDOM) // 選上午
     }
-    if (accountingShiftTestStatus === "diverse") {
-      await t.click(shiftDOM) // 選時段 動態點選
-    }
-    console.log('accountingShiftIds', accountingShiftIds)
-    console.log('groupRuleValue', groupRuleValue[groupRuleIndex])
     await t
       .click(groupRule) // 資料群組 動態點選
-      .click(showGroupRule) // 顯示方式 動態點選
+      .click(showGroupRule) // 明細
       .click(Button) // 預覽
-      .wait(3000)
+      .wait(1000)
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-    console.log('get', get.reportReportItemSummary)
-    // 取 畫面小計、總計
-    console.log('【掛號批價】', await reportReportItemSummary.innerText)
+    console.log('API參數', accountingShiftIds, accountingShiftIndex, await shiftDOM.innerText, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
     await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
     await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
     await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
-  })
+    accountingShiftIndex++
+  }
+})
 
-  test(`結帳交班表--不設定--明細: all`, async t => {
-    
-  })
+test(`時段多選`, async t => {
+  let accountingShiftIndex = 0 // 時段 DOM
+  const groupRuleIndex = 0 // 資料群組
+  const showGroupRuleIndex = 0 // 顯示方式
+  while (accountingShiftIndex < 3) {
+    const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
+    const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
+    const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+    const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+    if (accountingShiftIndex > 0) {
+      await t
+        .click(shiftAllDOM) // 全選
+        .click(shiftDOM) // 選時段 動態點選 下午、晚上
+    } else {
+      await t
+        .click(shiftDOM) // 選上午
+    }
+    await t
+      .click(groupRule) // 資料群組 動態點選
+      .click(showGroupRule) // 明細
+      .click(Button) // 預覽
+      .wait(1000)
+    // API
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+    console.log('API參數', accountingShiftIds, accountingShiftIndex, await shiftDOM.innerText, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    accountingShiftIndex++
+  }
+})
+
+// ! test.skip only ＝ 跳過此測試區域指令
+test.skip(`資料群組`, async t => {
+  let groupRuleIndex = 0 // 資料群組
+  let showGroupRuleIndex = groupRuleIndex // 顯示方式
+  while (groupRuleIndex < 3) {
+    console.log(groupRuleIndex, showGroupRuleIndex)
+    const accountingShiftIds = accountingShift
+    const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+    const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+    await t
+      .click(groupRule) // 資料群組 動態點選
+      .click(showGroupRule) // 
+      .click(Button) // 預覽
+      .wait(1000)
+    groupRuleIndex++
+  }
 })
 
 // TODO: 自動化測試程式要通過語法檢查 (npm run lint)
