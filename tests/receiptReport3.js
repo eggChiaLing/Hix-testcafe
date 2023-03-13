@@ -260,4 +260,34 @@ test(`日期--顯示方式*3`, async t => {
   }
 })
 
+// ! test.skip only ＝ 跳過此測試區域指令
+test.only(`日期+時段--顯示方式*2`, async t => {
+  const groupRuleIndex = 2 // 資料群組 日期+時段
+  let showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = [ "明細", "時段加總" ]
+  while (showGroupRuleIndex < 2) {
+    const accountingShiftIds = accountingShift
+    const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+    const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+    await t
+      .click(groupRule) // 資料群組 日期+時段
+      .click(showGroupRule) // 顯示方式 
+      .click(Button) // 預覽
+      .wait(1000)
+    // API
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
+    console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
+      console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
+      await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+      await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+      await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+      await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+      await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    }
+    showGroupRuleIndex++
+  }
+})
+
 // TODO: 自動化測試程式要通過語法檢查 (npm run lint)
