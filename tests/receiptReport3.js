@@ -60,7 +60,6 @@ const dateFromNumber = "10" // 指定日期
 const dateFromValue = Selector('span').withExactText(dateFromNumber) // 日期 DOM 位置
 const accountingShift = [ "AM", "PM", "EVENING" ]
 const groupRuleValue = [ "null", "DATE", "DATE_SHIFT" ]
-const showGroupRuleValue = "明細"
 
 fixture('結帳交班表')
 .page('http://test.hixcare.tw/dashboard').skipJsErrors()
@@ -86,7 +85,7 @@ test(`時段全選`, async t => {
   const accountingShiftIndex = -1 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
   const showGroupRuleIndex = 0 // 顯示方式
-  // const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
+  const showGroupRuleValue = "明細"
   const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
   const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
   const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
@@ -98,7 +97,6 @@ test(`時段全選`, async t => {
   await t.click(Button) // 預覽
   // API
   const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-  // console.log('accountingShiftIndex', accountingShiftIndex, 'API參數', await shiftDOM.innerText, accountingShiftIds, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
   // 比對 預覽的合計＆小計值與 API 回傳值
   await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
   await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -111,6 +109,7 @@ test(`時段單選`, async t => {
   let accountingShiftIndex = 0 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
   const showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = "明細"
   while (accountingShiftIndex < 3) {
     const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
     const accountingShiftIds = accountingShift.filter(i => i === accountingShift[accountingShiftIndex])
@@ -148,6 +147,7 @@ test(`時段多選`, async t => {
   let accountingShiftIndex = 0 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
   const showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = "明細"
   while (accountingShiftIndex < 3) {
     const shiftDOM = accountingShiftDOM.child('div').nth(1).child('div').nth(accountingShiftIndex).child('label') // 時段
     const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
@@ -170,21 +170,21 @@ test(`時段多選`, async t => {
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
     console.log('API參數', accountingShiftIds, accountingShiftIndex, await shiftDOM.innerText, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
     // 比對 預覽的合計＆小計值與 API 回傳值
-    // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
-    // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
-    // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
-    // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
-    // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     accountingShiftIndex++
   }
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
-test.skip(`資料群組`, async t => {
+test(`資料群組`, async t => {
   let groupRuleIndex = 0 // 資料群組
-  let showGroupRuleIndex = groupRuleIndex // 顯示方式
+  const showGroupRuleIndex = 0 // 顯示方式 明細
+  const showGroupRuleValue = "明細"
   while (groupRuleIndex < 3) {
-    console.log(groupRuleIndex, showGroupRuleIndex)
     const accountingShiftIds = accountingShift
     const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
     const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
@@ -193,7 +193,70 @@ test.skip(`資料群組`, async t => {
       .click(showGroupRule) // 
       .click(Button) // 預覽
       .wait(1000)
+    // API
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+    console.log('API參數', groupRuleIndex, showGroupRuleIndex, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     groupRuleIndex++
+  }
+})
+
+// ! test.skip only ＝ 跳過此測試區域指令
+test(`不設定--顯示方式*1`, async t => {
+  const groupRuleIndex = 0 // 資料群組 不設定
+  const showGroupRuleIndex = 0 // 顯示方式 明細
+  const showGroupRuleValue = "明細"
+  const accountingShiftIds = accountingShift
+  const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+  const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+  await t
+    .click(groupRule) // 資料群組 不設定
+    .click(showGroupRule) // 顯示方式 明細
+    .click(Button) // 預覽
+    .wait(1000)
+  // API
+  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+  console.log('API參數', groupRuleIndex, showGroupRuleIndex, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
+  // 比對 預覽的合計＆小計值與 API 回傳值
+  await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+  await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+  await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+  await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+  await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+})
+
+// ! test.skip only ＝ 跳過此測試區域指令
+test(`日期--顯示方式*3`, async t => {
+  const groupRuleIndex = 1 // 資料群組 日期
+  let showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = [ "明細", "日期加總", "人員加總" ]
+  while (showGroupRuleIndex < 3) {
+    const accountingShiftIds = accountingShift
+    const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+    const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+    await t
+      .click(groupRule) // 資料群組 日期
+      .click(showGroupRule) // 顯示方式 
+      .click(Button) // 預覽
+      .wait(1000)
+    // API
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
+    console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
+      console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
+      await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+      await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+      await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+      await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+      await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    }
+    showGroupRuleIndex++
   }
 })
 
