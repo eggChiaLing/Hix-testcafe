@@ -63,13 +63,14 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
         // console.log('時段加總 資料', dateShiftData[0].detail[0].dateInfo.date)
         // console.log('時段加總 資料', dateShiftData[0].summary.amount)
         // console.log('時段加總 期間的總計', dateShiftSummaryTotal)
+        // !!!!
         if (dateShiftSummaryTotal.length === 1) return {
-          dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
-          dateInfo2: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
-          dateInfo3: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
-          dateInfo5: dateShiftData[0].detail[0].dateInfo.date,
-          dateInfo6: moneyFormat(dateShiftData[0].summary.amount),
-          dateInfo7: moneyFormat(dateShiftSummaryTotal[0].amount)
+          amAmount: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
+          pmAmount: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
+          eveAmount: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
+          data: dateShiftData[0].detail[0].dateInfo.date,
+          dataAmount: moneyFormat(dateShiftData[0].summary.amount),
+          allAmount: moneyFormat(dateShiftSummaryTotal[0].amount)
         }
         const sum = dateShiftSummaryTotal.reduce((acc, curr) => {
           return [{
@@ -95,13 +96,14 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
           selfFee: 0
         }])
         // console.warn('總計', sum[0])
+        // !日期+時段--時段加總
         return {
-          dateInfo1: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
-          dateInfo2: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
-          dateInfo3: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
-          dateInfo5: moneyFormat(dateShiftData[0].detail[0].dateInfo.date),
-          dateInfo6: moneyFormat(dateShiftData[0].summary.amount),
-          dateInfo7: moneyFormat(sum[0].amount)
+          amAmount: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
+          pmAmount: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
+          eveAmount: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
+          data: dateShiftData[0].detail[0].dateInfo.date,
+          dataAmount: moneyFormat(dateShiftData[0].summary.amount),
+          allAmount: moneyFormat(sum[0].amount)
         } 
       }
 

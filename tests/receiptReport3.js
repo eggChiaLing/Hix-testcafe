@@ -43,6 +43,7 @@ const showBaseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).c
 // ? 按鈕預覽
 const Button = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(0).child('div').child('button').nth(1).child('span')
 
+//! 明細 DOM
 //? 掛號小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
 //? 押金小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
 //? 門診小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[6]/tbody/tr/td[3]/span[5]
@@ -54,6 +55,29 @@ const receiptDepositItemSummary = baseTotalDOM.child('table').nth(3).child('tbod
 const receiptSelfBehalfItemSummary = baseTotalDOM.child('table').nth(5).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
 const ecReportItemSummary = baseTotalDOM.child('table').nth(7).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
 const totalReceiptSummary = baseTotalDOM.child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span')
+
+//! 日期--日期加總 DOM
+// /html/body/div[1]/div/
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[6]/td[9]/span
+
+//! 日期--人員加總 DOM
+
+//! 日期+時段--時段加總 DOM
+// /html/body/div[1]/div/
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[2]
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[2]/tbody[1]/tr[4]//td[9]/span
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[2]/tbody[2]/tr[4]/td[9]/span
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[2]/tbody[3]/tr[4]/td[9]/span
+const DATEbaseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('div').nth(0).child('table').nth(1)
+const amAmountTotalDOM = DATEbaseTotalDOM.child('tbody').nth(0).child('tr').nth(3).child('td').nth(8).child('span')
+const pmAmountTotalDOM = DATEbaseTotalDOM.child('tbody').nth(1).child('tr').nth(3).child('td').nth(8).child('span')
+const eveAmountTotalDOM = DATEbaseTotalDOM.child('tbody').nth(2).child('tr').nth(3).child('td').nth(8).child('span')
+
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[3]/tbody/tr/th
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/div[1]/table[3]/tbody/tr/td[9]/span
+const dataBaseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('div').nth(0).child('table').nth(2)
+const dataDOM = dataBaseDOM.child('tbody').child('tr').child('th')
+const dataAmountTotalDOM = dataBaseDOM.child('tbody').child('tr').child('td').nth(8).child('span')
 
 // API參數 ＆ DOM位置控制
 const dateFromNumber = "10" // 指定日期
@@ -231,7 +255,7 @@ test(`不設定--顯示方式*1`, async t => {
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
-test(`日期--顯示方式*3`, async t => {
+test.only(`日期--顯示方式*3`, async t => {
   const groupRuleIndex = 1 // 資料群組 日期
   let showGroupRuleIndex = 0 // 顯示方式
   const showGroupRuleValue = [ "明細", "日期加總", "人員加總" ]
@@ -244,10 +268,9 @@ test(`日期--顯示方式*3`, async t => {
       .click(showGroupRule) // 顯示方式 
       .click(Button) // 預覽
       .wait(1000)
-    // API
+    // 比對合計值與 API 回傳值
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
     console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
-    // 比對 預覽的合計＆小計值與 API 回傳值
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
       console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
@@ -256,12 +279,18 @@ test(`日期--顯示方式*3`, async t => {
       await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
       await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     }
+    if (showGroupRuleValue[showGroupRuleIndex] === "日期加總") {
+      console.log('日期加總', get)
+    }
+    if (showGroupRuleValue[showGroupRuleIndex] === "人員加總") {
+      console.log('人員加總', get)
+    }
     showGroupRuleIndex++
   }
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
-test.only(`日期+時段--顯示方式*2`, async t => {
+test(`日期+時段--顯示方式*2`, async t => {
   const groupRuleIndex = 2 // 資料群組 日期+時段
   let showGroupRuleIndex = 0 // 顯示方式
   const showGroupRuleValue = [ "明細", "時段加總" ]
@@ -274,10 +303,9 @@ test.only(`日期+時段--顯示方式*2`, async t => {
       .click(showGroupRule) // 顯示方式 
       .click(Button) // 預覽
       .wait(1000)
-    // API
+    // 比對合計值與 API 回傳值
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
     console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
-    // 比對 預覽的合計＆小計值與 API 回傳值
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
       console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
@@ -285,6 +313,15 @@ test.only(`日期+時段--顯示方式*2`, async t => {
       await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
       await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
       await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    }
+    if (showGroupRuleValue[showGroupRuleIndex] === "時段加總") {
+      // console.log('get', get)
+      console.log(get.amAmount, '上午 小計值', await amAmountTotalDOM.innerText)
+      await t.expect(await amAmountTotalDOM.innerText).eql(`${get.amAmount}`, '上午 小計值錯誤')
+      await t.expect(await pmAmountTotalDOM.innerText).eql(`${get.pmAmount}`, '下午 小計值錯誤')
+      await t.expect(await eveAmountTotalDOM.innerText).eql(`${get.eveAmount}`, '晚上 小計值錯誤')
+      await t.expect(await dataDOM.innerText).eql(`${get.data}`, '批價日')
+      await t.expect(await dataAmountTotalDOM.innerText).eql(`${get.dataAmount}`, '批價日 實收合計值錯誤')
     }
     showGroupRuleIndex++
   }
