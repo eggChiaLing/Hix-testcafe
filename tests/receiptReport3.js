@@ -58,7 +58,20 @@ const totalReceiptSummary = baseTotalDOM.child('table').nth(8).child('tbody').ch
 
 //! 日期--日期加總 DOM
 // /html/body/div[1]/div/
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[6]/td[9]/span
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]/th
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]/td[1]
+const DATETotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('table').child('tbody').child('tr').nth(1) // 取第一筆
+const DATETdata = DATETotalDOM.child('th')
+const registFee = DATETotalDOM.child('td').nth(0)
+const registFee4Nhi = DATETotalDOM.child('td').nth(1)
+const registFee4NhiPT = DATETotalDOM.child('td').nth(2)
+const nhiSelfFee = DATETotalDOM.child('td').nth(3)
+const selfFee = DATETotalDOM.child('td').nth(4)
+const behalf = DATETotalDOM.child('td').nth(5)
+const deposit = DATETotalDOM.child('td').nth(6)
+const ar = DATETotalDOM.child('td').nth(7)
+const amount = DATETotalDOM.child('td').nth(8)
 
 //! 日期--人員加總 DOM
 
@@ -95,13 +108,13 @@ fixture('結帳交班表')
       .click(dateFromValue) // 指定日期 動態點選
   })
   .afterEach(async t => {
-    console.log('------功能OK-----')
+    console.log('------功能-----')
   })
   .before(async t => {
-    console.log('------開始-----')
+    console.log('------------------------------開始---------------------------------------')
   })
   .after(async t => {
-    console.log('------結束-----')
+    console.log('------------------------------結束---------------------------------------')
   })
   
 // ! test.skip only＝ 跳過此測試區域指令
@@ -156,7 +169,6 @@ test(`時段單選`, async t => {
       .wait(1000)
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-    console.log('API參數', accountingShiftIds, accountingShiftIndex, await shiftDOM.innerText, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -192,7 +204,6 @@ test(`時段多選`, async t => {
       .wait(1000)
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-    console.log('API參數', accountingShiftIds, accountingShiftIndex, await shiftDOM.innerText, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -219,7 +230,6 @@ test(`資料群組`, async t => {
       .wait(1000)
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-    console.log('API參數', groupRuleIndex, showGroupRuleIndex, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -245,7 +255,6 @@ test(`不設定--顯示方式*1`, async t => {
     .wait(1000)
   // API
   const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
-  console.log('API參數', groupRuleIndex, showGroupRuleIndex, groupRuleValue[groupRuleIndex], get.reportReportItemSummary, '【掛號批價】', await reportReportItemSummary.innerText)
   // 比對 預覽的合計＆小計值與 API 回傳值
   await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
   await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -270,9 +279,7 @@ test.only(`日期--顯示方式*3`, async t => {
       .wait(1000)
     // 比對合計值與 API 回傳值
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
-    console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
-      console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
       await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
       await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
@@ -280,7 +287,17 @@ test.only(`日期--顯示方式*3`, async t => {
       await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     }
     if (showGroupRuleValue[showGroupRuleIndex] === "日期加總") {
-      console.log('日期加總', get)
+      // console.log('日期加總', get)
+      await t.expect(await DATETdata.innerText).eql(`${get.data}`, '日期錯誤')
+      await t.expect(await registFee.innerText).eql(`${get.registFee}`, '掛號費 小計值錯誤')
+      await t.expect(await registFee4Nhi.innerText).eql(`${get.registFee4Nhi}`, '掛號費部份負擔 小計值錯誤')
+      await t.expect(await registFee4NhiPT.innerText).eql(`${get.registFee4NhiPT}`, '復健部份負擔 小計值錯誤')
+      await t.expect(await nhiSelfFee.innerText).eql(`${get.nhiSelfFee}`, '藥費負擔 小計值錯誤')
+      await t.expect(await selfFee.innerText).eql(`${get.selfFee}`, '自費 小計值錯誤')
+      await t.expect(await behalf.innerText).eql(`${get.behalf}`, '代收 小計值錯誤')
+      await t.expect(await deposit.innerText).eql(`${get.deposit}`, '押金 小計值錯誤')
+      await t.expect(await ar.innerText).eql(`${get.ar}`, '欠款 小計值錯誤')
+      await t.expect(await amount.innerText).eql(`${get.amount}`, '實收 小計值錯誤')
     }
     if (showGroupRuleValue[showGroupRuleIndex] === "人員加總") {
       console.log('人員加總', get)
@@ -305,9 +322,7 @@ test(`日期+時段--顯示方式*2`, async t => {
       .wait(1000)
     // 比對合計值與 API 回傳值
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
-    console.log('API參數', showGroupRuleValue[showGroupRuleIndex], showGroupRuleIndex)
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
-      console.log('【掛號批價】', await reportReportItemSummary.innerText, get.reportReportItemSummary)
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
       await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
       await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
@@ -315,8 +330,6 @@ test(`日期+時段--顯示方式*2`, async t => {
       await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     }
     if (showGroupRuleValue[showGroupRuleIndex] === "時段加總") {
-      // console.log('get', get)
-      console.log(get.amAmount, '上午 小計值', await amAmountTotalDOM.innerText)
       await t.expect(await amAmountTotalDOM.innerText).eql(`${get.amAmount}`, '上午 小計值錯誤')
       await t.expect(await pmAmountTotalDOM.innerText).eql(`${get.pmAmount}`, '下午 小計值錯誤')
       await t.expect(await eveAmountTotalDOM.innerText).eql(`${get.eveAmount}`, '晚上 小計值錯誤')

@@ -22,7 +22,7 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
   try {
     counterUserIds = [...listPTUsersId, ...listCounterUsersId]
     // console.log('counterUserIds', counterUserIds)
-    // console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
+    console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
     const dateFromDay = dateFromNumber.length === 1 ? `0${dateFromNumber}` : dateFromNumber
     const dateShiftData = []
     const printData = []
@@ -43,7 +43,71 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
       }
     })
 
-    // 處理 日期+時段 選項的資料結構
+    // 日期-資料
+    if (groupRule === 'DATE') {
+      if (showGroupRuleValue === '明細') {
+        return {
+          reportReportItemSummary: moneyFormat(res.data.result.receiptReport[0].reportReportItemSummary.total), // 掛號批價
+          receiptDepositItemSummary: moneyFormat(res.data.result.receiptReport[0].receiptDepositItemSummary.total), // 押金
+          receiptSelfBehalfItemSummary: moneyFormat(res.data.result.receiptReport[0].receiptSelfBehalfItemSummary.total), // 門診自費/代收
+          ecReportItemSummary: moneyFormat(res.data.result.receiptReport[0].ecReportItemSummary.total), // 自費購物
+          totalReceiptSummary: moneyFormat(res.data.result.receiptReport[0].totalReceiptSummary.amount) // 總計
+        }
+      }
+      
+      if (showGroupRuleValue === '日期加總') {
+        // 取得 各日期的加總
+        const all = res.data.result.receiptReport.map((item) => {
+          return {
+            date: item.dateInfo.date,
+            shift: item.dateInfo.shift,
+            totalReceiptSummary: item.totalReceiptSummary
+          }
+        })
+        // console.log('日期加總', all[0].date, all[0].totalReceiptSummary.amount)
+        // console.log('日期加總', res.data.result.dateRangeSummary)
+        // 回傳的第一筆資料
+        return {
+          data: all[0].date, // 日期
+          registFee: moneyFormat(all[0].totalReceiptSummary.registFee), // 掛號費
+          registFee4Nhi: moneyFormat(all[0].totalReceiptSummary.registFee4Nhi), // 掛號費部份負擔	
+          registFee4NhiPT: moneyFormat(all[0].totalReceiptSummary.registFee4NhiPT), // 復健部份負擔	
+          nhiSelfFee: moneyFormat(all[0].totalReceiptSummary.nhiSelfFee), // 藥費負擔	
+          selfFee: moneyFormat(all[0].totalReceiptSummary.selfFee), // 自費
+          behalf: moneyFormat(all[0].totalReceiptSummary.behalf), // 代收
+          deposit: moneyFormat(all[0].totalReceiptSummary.deposit), // 押金
+          ar: moneyFormat(all[0].totalReceiptSummary.ar), // 欠款
+          amount: moneyFormat(all[0].totalReceiptSummary.amount) // 實收
+        }
+        // TODO: 總計區 需要要根據長度計算DOM位置
+        // return {
+        //   registFee: moneyFormat(res.data.result.dateRangeSummary.registFee), // 掛號費
+        //   registFee4Nhi: moneyFormat(res.data.result.dateRangeSummary.registFee4Nhi), // 掛號費部份負擔	
+        //   registFee4NhiPT: moneyFormat(res.data.result.dateRangeSummary.registFee4NhiPT), // 復健部份負擔	
+        //   nhiSelfFee: moneyFormat(res.data.result.dateRangeSummary.nhiSelfFee), // 藥費負擔	
+        //   selfFee: moneyFormat(res.data.result.dateRangeSummary.selfFee), // 自費
+        //   behalf: moneyFormat(res.data.result.dateRangeSummary.behalf), // 代收
+        //   deposit: moneyFormat(res.data.result.dateRangeSummary.deposit), // 押金
+        //   ar: moneyFormat(res.data.result.dateRangeSummary.ar), // 欠款
+        //   amount: moneyFormat(res.data.result.dateRangeSummary.amount) // 實收
+        // }
+      }
+      
+      if (showGroupRuleValue === '人員加總') {
+        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].userName)
+        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].amount)
+        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].expend)
+        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].total)
+        return {
+          receiptSummaryByUsersName: res.data.result.receiptReport[0].receiptSummaryByUsers.userName, // 名稱
+          receiptSummaryByUsersAmount: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].amount), // 
+          receiptSummaryByUsersExpend: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].expend), // 
+          receiptSummaryByUsersTotal: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].total), // 
+        }
+      }
+    }
+
+    // 日期+時段-資料
     if (groupRule === 'DATE_SHIFT') {
       for (let i = 0; i < res.data.result.receiptReport.length; i++) {
         // 取 時段加總 資料
@@ -57,20 +121,17 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
       }
 
       if (showGroupRuleValue === '時段加總') {
-        // console.log('時段加總 資料', dateShiftData[0].detail[0].totalReceiptSummary.amount)
-        // console.log('時段加總 資料', dateShiftData[0].detail[1].totalReceiptSummary.amount)
-        // console.log('時段加總 資料', dateShiftData[0].detail[2].totalReceiptSummary.amount)
-        // console.log('時段加總 資料', dateShiftData[0].detail[0].dateInfo.date)
-        // console.log('時段加總 資料', dateShiftData[0].summary.amount)
-        // console.log('時段加總 期間的總計', dateShiftSummaryTotal)
-        // !!!!
-        if (dateShiftSummaryTotal.length === 1) return {
-          amAmount: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
-          pmAmount: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
-          eveAmount: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
-          data: dateShiftData[0].detail[0].dateInfo.date,
-          dataAmount: moneyFormat(dateShiftData[0].summary.amount),
-          allAmount: moneyFormat(dateShiftSummaryTotal[0].amount)
+        // console.log('時段加總 資料', dateShiftData, dateShiftSummaryTotal, printData)
+        if (dateShiftSummaryTotal.length === 1) {
+          console.log('!!! 時段加總????????????????????????????????????????????????????')
+          // return {
+          //   amAmount: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
+          //   pmAmount: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
+          //   eveAmount: moneyFormat(dateShiftData[0].detail[2].totalReceiptSummary.amount),
+          //   data: dateShiftData[0].detail[0].dateInfo.date,
+          //   dataAmount: moneyFormat(dateShiftData[0].summary.amount),
+          //   allAmount: moneyFormat(dateShiftSummaryTotal[0].amount)
+          // }
         }
         const sum = dateShiftSummaryTotal.reduce((acc, curr) => {
           return [{
@@ -96,7 +157,7 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
           selfFee: 0
         }])
         // console.warn('總計', sum[0])
-        // !日期+時段--時段加總
+        // 日期+時段--時段加總
         return {
           amAmount: moneyFormat(dateShiftData[0].detail[0].totalReceiptSummary.amount),
           pmAmount: moneyFormat(dateShiftData[0].detail[1].totalReceiptSummary.amount),
@@ -118,7 +179,9 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
         }
       }
     }
+
     // console.log('res 明細', res.data.result.receiptReport)
+    // 不設定-明細
     return {
       reportReportItemSummary: moneyFormat(res.data.result.receiptReport[0].reportReportItemSummary.total), // 掛號批價
       receiptDepositItemSummary: moneyFormat(res.data.result.receiptReport[0].receiptDepositItemSummary.total), // 押金
