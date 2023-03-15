@@ -44,36 +44,36 @@ const showBaseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).c
 const Button = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(0).child('div').child('button').nth(1).child('span')
 
 //! 明細 DOM
-//? 掛號小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
-//? 押金小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[4]/tbody/tr/td[3]/span[5]
-//? 門診小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[6]/tbody/tr/td[3]/span[5]
-//? 自費小計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[8]/tbody/tr/td[3]/span[5]
-//? 總計 /html/body/div/div/div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[9]/tbody/tr[5]/td[9]/span
-const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div')
-const reportReportItemSummary = baseTotalDOM.child('table').nth(1).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
-const receiptDepositItemSummary = baseTotalDOM.child('table').nth(3).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
-const receiptSelfBehalfItemSummary = baseTotalDOM.child('table').nth(5).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
-const ecReportItemSummary = baseTotalDOM.child('table').nth(7).child('tbody').child('tr').child('td').nth(2).child('span').nth(4)
+const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div') //掛號小計
+const reportReportItemSummary = baseTotalDOM.child('table').nth(1).child('tbody').child('tr').child('td').nth(2).child('span').nth(4) //押金小計
+const receiptDepositItemSummary = baseTotalDOM.child('table').nth(3).child('tbody').child('tr').child('td').nth(2).child('span').nth(4) //門診小計
+const receiptSelfBehalfItemSummary = baseTotalDOM.child('table').nth(5).child('tbody').child('tr').child('td').nth(2).child('span').nth(4) //自費小計
+const ecReportItemSummary = baseTotalDOM.child('table').nth(7).child('tbody').child('tr').child('td').nth(2).child('span').nth(4) //總計
 const totalReceiptSummary = baseTotalDOM.child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span')
 
 //! 日期--日期加總 DOM
-// /html/body/div[1]/div/
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]/th
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table/tbody/tr[2]/td[1]
 const DATETotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('table').child('tbody').child('tr').nth(1) // 取第一筆
-const DATETdata = DATETotalDOM.child('th')
-const registFee = DATETotalDOM.child('td').nth(0)
-const registFee4Nhi = DATETotalDOM.child('td').nth(1)
-const registFee4NhiPT = DATETotalDOM.child('td').nth(2)
-const nhiSelfFee = DATETotalDOM.child('td').nth(3)
-const selfFee = DATETotalDOM.child('td').nth(4)
-const behalf = DATETotalDOM.child('td').nth(5)
-const deposit = DATETotalDOM.child('td').nth(6)
-const ar = DATETotalDOM.child('td').nth(7)
-const amount = DATETotalDOM.child('td').nth(8)
+const DATETdata = DATETotalDOM.child('th') //日期
+const registFee = DATETotalDOM.child('td').nth(0) //掛號費
+const registFee4Nhi = DATETotalDOM.child('td').nth(1) //掛號費部份負擔	
+const registFee4NhiPT = DATETotalDOM.child('td').nth(2) //復健部份負擔
+const nhiSelfFee = DATETotalDOM.child('td').nth(3) //藥費負擔	
+const selfFee = DATETotalDOM.child('td').nth(4) //自費
+const behalf = DATETotalDOM.child('td').nth(5) //代收
+const deposit = DATETotalDOM.child('td').nth(6) //押金
+const ar = DATETotalDOM.child('td').nth(7) //欠款
+const amount = DATETotalDOM.child('td').nth(8) //實收
 
 //! 日期--人員加總 DOM
+// /html/body/div/div
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div[1]/table[1]/tbody/tr[2]
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div[1]/table[1]/tbody/tr[2]/td[1]
+const receiptSummaryBaseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').nth(0).child('table').nth(0).child('tbody').child('tr').nth(1) //抓第一位
+const receiptSummaryByUsersName = receiptSummaryBaseDOM.child('td').nth(0) //人員姓名
+const receiptSummaryByUsersAmount = receiptSummaryBaseDOM.child('td').nth(1).child('span').nth(1)
+const receiptSummaryByUsersExpend = receiptSummaryBaseDOM.child('td').nth(1).child('span').nth(3)
+const receiptSummaryByUsersTotal = receiptSummaryBaseDOM.child('td').nth(1).child('span').nth(5)
+
 
 //! 日期+時段--時段加總 DOM
 // /html/body/div[1]/div/
@@ -93,7 +93,7 @@ const dataDOM = dataBaseDOM.child('tbody').child('tr').child('th')
 const dataAmountTotalDOM = dataBaseDOM.child('tbody').child('tr').child('td').nth(8).child('span')
 
 // API參數 ＆ DOM位置控制
-const dateFromNumber = "10" // 指定日期
+const dateFromNumber = "10" // !指定日期
 const dateFromValue = Selector('span').withExactText(dateFromNumber) // 日期 DOM 位置
 const accountingShift = [ "AM", "PM", "EVENING" ]
 const groupRuleValue = [ "null", "DATE", "DATE_SHIFT" ]
@@ -264,7 +264,7 @@ test(`不設定--顯示方式*1`, async t => {
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
-test.only(`日期--顯示方式*3`, async t => {
+test(`日期--顯示方式*3`, async t => {
   const groupRuleIndex = 1 // 資料群組 日期
   let showGroupRuleIndex = 0 // 顯示方式
   const showGroupRuleValue = [ "明細", "日期加總", "人員加總" ]
@@ -289,18 +289,22 @@ test.only(`日期--顯示方式*3`, async t => {
     if (showGroupRuleValue[showGroupRuleIndex] === "日期加總") {
       // console.log('日期加總', get)
       await t.expect(await DATETdata.innerText).eql(`${get.data}`, '日期錯誤')
-      await t.expect(await registFee.innerText).eql(`${get.registFee}`, '掛號費 小計值錯誤')
-      await t.expect(await registFee4Nhi.innerText).eql(`${get.registFee4Nhi}`, '掛號費部份負擔 小計值錯誤')
-      await t.expect(await registFee4NhiPT.innerText).eql(`${get.registFee4NhiPT}`, '復健部份負擔 小計值錯誤')
-      await t.expect(await nhiSelfFee.innerText).eql(`${get.nhiSelfFee}`, '藥費負擔 小計值錯誤')
-      await t.expect(await selfFee.innerText).eql(`${get.selfFee}`, '自費 小計值錯誤')
-      await t.expect(await behalf.innerText).eql(`${get.behalf}`, '代收 小計值錯誤')
-      await t.expect(await deposit.innerText).eql(`${get.deposit}`, '押金 小計值錯誤')
-      await t.expect(await ar.innerText).eql(`${get.ar}`, '欠款 小計值錯誤')
-      await t.expect(await amount.innerText).eql(`${get.amount}`, '實收 小計值錯誤')
+      await t.expect(await registFee.innerText).eql(`${get.registFee}`, '掛號費 錯誤')
+      await t.expect(await registFee4Nhi.innerText).eql(`${get.registFee4Nhi}`, '掛號費部份負擔 錯誤')
+      await t.expect(await registFee4NhiPT.innerText).eql(`${get.registFee4NhiPT}`, '復健部份負擔 錯誤')
+      await t.expect(await nhiSelfFee.innerText).eql(`${get.nhiSelfFee}`, '藥費負擔 錯誤')
+      await t.expect(await selfFee.innerText).eql(`${get.selfFee}`, '自費 錯誤')
+      await t.expect(await behalf.innerText).eql(`${get.behalf}`, '代收 錯誤')
+      await t.expect(await deposit.innerText).eql(`${get.deposit}`, '押金 錯誤')
+      await t.expect(await ar.innerText).eql(`${get.ar}`, '欠款 錯誤')
+      await t.expect(await amount.innerText).eql(`${get.amount}`, '實收 錯誤')
     }
     if (showGroupRuleValue[showGroupRuleIndex] === "人員加總") {
-      console.log('人員加總', get)
+      // console.log('人員加總', get)
+      await t.expect(await receiptSummaryByUsersName.innerText).eql(`${get.receiptSummaryByUsersName}`, '人員姓名 錯誤')
+      await t.expect(await receiptSummaryByUsersAmount.innerText).eql(`${get.receiptSummaryByUsersAmount}`, '$錯誤')
+      await t.expect(await receiptSummaryByUsersExpend.innerText).eql(`${get.receiptSummaryByUsersExpend}`, '$錯誤')
+      await t.expect(await receiptSummaryByUsersTotal.innerText).eql(`${get.receiptSummaryByUsersTotal}`, ' 合計 錯誤')
     }
     showGroupRuleIndex++
   }

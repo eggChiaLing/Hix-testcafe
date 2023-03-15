@@ -22,7 +22,7 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
   try {
     counterUserIds = [...listPTUsersId, ...listCounterUsersId]
     // console.log('counterUserIds', counterUserIds)
-    console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
+    // console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
     const dateFromDay = dateFromNumber.length === 1 ? `0${dateFromNumber}` : dateFromNumber
     const dateShiftData = []
     const printData = []
@@ -94,12 +94,12 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
       }
       
       if (showGroupRuleValue === '人員加總') {
-        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].userName)
-        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].amount)
-        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].expend)
-        console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].total)
+        // console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].userName)
+        // console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].amount)
+        // console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].expend)
+        // console.log('人員加總', res.data.result.receiptReport[0].receiptSummaryByUsers[0].total)
         return {
-          receiptSummaryByUsersName: res.data.result.receiptReport[0].receiptSummaryByUsers.userName, // 名稱
+          receiptSummaryByUsersName: res.data.result.receiptReport[0].receiptSummaryByUsers[0].userName, // 名稱
           receiptSummaryByUsersAmount: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].amount), // 
           receiptSummaryByUsersExpend: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].expend), // 
           receiptSummaryByUsersTotal: moneyFormat(res.data.result.receiptReport[0].receiptSummaryByUsers[0].total), // 
