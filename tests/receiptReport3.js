@@ -35,13 +35,29 @@ const dateFromButton = dateFromBasicDOM.child('label')
 // ? 時段別
 const accountingShiftDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(2).child('div').nth(1)
 const shiftAllDOM = accountingShiftDOM.child('div').nth(0).child('label') // 時段全選
-// ?! 櫃位＆人員
 // ? 資料群組
 const baseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(5).child('div').nth(1).child('div')
 // ? 顯示方式
 const showBaseGroupRuleDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(6).child('div').nth(1)
 // ? 按鈕預覽
 const Button = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(0).child('div').child('button').nth(1).child('span')
+
+// ?! 櫃位
+// /html/body/div/div/
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[1]/label
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[2]/label
+const u = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(0).child('label') //櫃位
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[1]/label
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[2]/label
+const u1DOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(4).child('div').child('div')
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[2]/tbody/tr/td[3]/span[5]
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[9]/tbody/tr[5]/td[9]/span
+// const u3TotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span').nth(8).child('span')
+
+
+// ?! 人員
+const uu1 = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(1).child('label') //人員
+
 
 //! 明細 DOM
 const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div') //掛號小計
@@ -96,6 +112,7 @@ const dataAmountTotalDOM = dataBaseDOM.child('tbody').child('tr').child('td').nt
 const dateFromNumber = "10" // !指定日期
 const dateFromValue = Selector('span').withExactText(dateFromNumber) // 日期 DOM 位置
 const accountingShift = [ "AM", "PM", "EVENING" ]
+const counterUserText = '全部'
 const groupRuleValue = [ "null", "DATE", "DATE_SHIFT" ]
 
 fixture('結帳交班表')
@@ -117,7 +134,7 @@ fixture('結帳交班表')
     console.log('------------------------------結束---------------------------------------')
   })
   
-// ! test.skip only＝ 跳過此測試區域指令
+// ! test.skip only 跳過此測試區域指令
 test(`時段全選`, async t => {
   const accountingShiftIndex = -1 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
@@ -131,9 +148,8 @@ test(`時段全選`, async t => {
     .click(showGroupRule) // 明細
     .click(Button) // 預覽
     .wait(500)
-  await t.click(Button) // 預覽
   // API
-  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, counterUserText)
   // 比對 預覽的合計＆小計值與 API 回傳值
   await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
   await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -168,7 +184,7 @@ test(`時段單選`, async t => {
       .click(Button) // 預覽
       .wait(1000)
     // API
-    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, counterUserText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -203,7 +219,7 @@ test(`時段多選`, async t => {
       .click(Button) // 預覽
       .wait(1000)
     // API
-    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, counterUserText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -211,6 +227,43 @@ test(`時段多選`, async t => {
     await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
     await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     accountingShiftIndex++
+  }
+})
+
+// ! test.skip only 跳過此測試區域指令
+test.only(`櫃位`, async t => {
+  const accountingShiftIndex = -1 // 時段 DOM
+  const groupRuleIndex = 0 // 資料群組
+  const showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = "明細"
+  const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
+  const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+  const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+  let u1TextIndex = 0 // 櫃位(全部、櫃檯)
+  while (u1TextIndex < 2) {
+    const u1 = u1DOM.child('div').nth(u1TextIndex).child('label')
+    await t
+      .click(u) // 櫃位
+      .click(u1) // (全部、櫃檯)
+    await t
+      .click(groupRule) // 資料群組 不設定
+      .click(showGroupRule) // 顯示方式 明細
+      .click(Button) // 預覽
+      .wait(500)
+    const u1Text = await u1.innerText
+    console.log(u1TextIndex, u1Text)
+    // API
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, u1Text)
+    console.log(get)
+    // console.log(u2Text, await u3TotalDOM.innerText)
+    // console.log(u3Text, await totalReceiptSummary.innerText)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    u1TextIndex++
   }
 })
 
@@ -229,7 +282,7 @@ test(`資料群組`, async t => {
       .click(Button) // 預覽
       .wait(1000)
     // API
-    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, counterUserText)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -254,7 +307,7 @@ test(`不設定--顯示方式*1`, async t => {
     .click(Button) // 預覽
     .wait(1000)
   // API
-  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue)
+  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, counterUserText)
   // 比對 預覽的合計＆小計值與 API 回傳值
   await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
   await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -278,7 +331,7 @@ test(`日期--顯示方式*3`, async t => {
       .click(Button) // 預覽
       .wait(1000)
     // 比對合計值與 API 回傳值
-    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex], counterUserText)
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
       await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -325,7 +378,7 @@ test(`日期+時段--顯示方式*2`, async t => {
       .click(Button) // 預覽
       .wait(1000)
     // 比對合計值與 API 回傳值
-    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex])
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue[showGroupRuleIndex], counterUserText)
     if (showGroupRuleValue[showGroupRuleIndex] === "明細") {
       await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
       await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')

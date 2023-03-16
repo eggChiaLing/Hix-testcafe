@@ -18,11 +18,12 @@ getListPTUsers()
 listCounterUser()
 
 // 取 結帳教班表 資料
-async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue) {
+async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText) {
   try {
-    counterUserIds = [...listPTUsersId, ...listCounterUsersId]
-    // console.log('counterUserIds', counterUserIds)
-    // console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue)
+    console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText)
+    // counterUserIds = [...listPTUsersId, ...listCounterUsersId]
+    counterUserIds = counterUserText === '全部' ? [...listPTUsersId, ...listCounterUsersId] : [...listCounterUsersId]
+    console.log('counterUserIds', counterUserIds)
     const dateFromDay = dateFromNumber.length === 1 ? `0${dateFromNumber}` : dateFromNumber
     const dateShiftData = []
     const printData = []
