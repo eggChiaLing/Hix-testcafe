@@ -45,19 +45,13 @@ const Button = Selector('#app').child('div').child('div').nth(2).child('div').ch
 // ?! 櫃位
 // /html/body/div/div/
 // div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[1]/label
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[2]/label
 const u = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(0).child('label') //櫃位
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[1]/label
 // div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[2]/label
 const u1DOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(4).child('div').child('div')
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[2]/tbody/tr/td[3]/span[5]
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/table[9]/tbody/tr[5]/td[9]/span
-// const u3TotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div').child('table').nth(8).child('tbody').child('tr').nth(4).child('td').nth(8).child('span').nth(8).child('span')
-
 
 // ?! 人員
-const uu1 = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(1).child('label') //人員
-
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[2]/label
+const uu = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(1).child('label') //人員
 
 //! 明細 DOM
 const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div') //掛號小計
@@ -231,7 +225,7 @@ test(`時段多選`, async t => {
 })
 
 // ! test.skip only 跳過此測試區域指令
-test.only(`櫃位`, async t => {
+test(`櫃位`, async t => {
   const accountingShiftIndex = -1 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
   const showGroupRuleIndex = 0 // 顯示方式
@@ -251,20 +245,46 @@ test.only(`櫃位`, async t => {
       .click(Button) // 預覽
       .wait(500)
     const u1Text = await u1.innerText
-    console.log(u1TextIndex, u1Text)
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, u1Text)
-    console.log(get)
-    // console.log(u2Text, await u3TotalDOM.innerText)
-    // console.log(u3Text, await totalReceiptSummary.innerText)
+    // console.log(get)
+    console.log(u1TextIndex, u1Text, await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
     // 比對 預覽的合計＆小計值與 API 回傳值
-    // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
-    // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
-    // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
-    // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
-    // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
     u1TextIndex++
   }
+})
+
+// ! test.skip only 跳過此測試區域指令
+test.only(`人員`, async t => {
+  const accountingShiftIndex = -1 // 時段 DOM
+  const groupRuleIndex = 0 // 資料群組
+  const showGroupRuleIndex = 0 // 顯示方式
+  const showGroupRuleValue = "明細"
+  const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
+  const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
+  const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
+  await t
+    .click(uu) // 人員
+  await t
+    .click(groupRule) // 資料群組 不設定
+    .click(showGroupRule) // 顯示方式 明細
+    .click(Button) // 預覽
+    .wait(500)
+  // TODO: API確認
+  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, '櫃檯')
+  console.log(get)
+  console.log(await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
+  // 比對 預覽的合計＆小計值與 API 回傳值
+  // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+  // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+  // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+  // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+  // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
