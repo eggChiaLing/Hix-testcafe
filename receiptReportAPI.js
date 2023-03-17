@@ -18,12 +18,14 @@ getListPTUsers()
 listCounterUser()
 
 // 取 結帳教班表 資料
-async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText) {
+async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText, counterUserIndex) {
   try {
-    console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText)
-    // counterUserIds = [...listPTUsersId, ...listCounterUsersId]
+    // console.log('---API---資料群組----', dateFromNumber, accountingShiftIds, groupRule, showGroupRuleValue, counterUserText)
     counterUserIds = counterUserText === '全部' ? [...listPTUsersId, ...listCounterUsersId] : [...listCounterUsersId]
-    console.log('counterUserIds', counterUserIds)
+    if (counterUserText === '人員' && counterUserIndex >= 0) {
+      counterUserIds = [counterUserIds[counterUserIndex]]
+    }
+    // console.log('counterUserIds', counterUserIds)
     const dateFromDay = dateFromNumber.length === 1 ? `0${dateFromNumber}` : dateFromNumber
     const dateShiftData = []
     const printData = []
@@ -31,6 +33,7 @@ async function receiptReport2(dateFromNumber, accountingShiftIds, groupRule, sho
     const res = await axios({
       method: 'post',
       url: `${baseURL}/report/receiptReport2`,
+
       headers: {
         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkEzNjkiLCJpYXQiOjE2NzIxMjM4OTAsImV4cCI6MTY3MjIxMDI5MH0.FP-tolYJTlrZtbj_cEflCoh-oblrqLu_2asdyi6sCNg'
       },

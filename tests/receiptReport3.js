@@ -44,14 +44,19 @@ const Button = Selector('#app').child('div').child('div').nth(2).child('div').ch
 
 // ?! 櫃位
 // /html/body/div/div/
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[1]/label
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[1]/label 櫃位
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[2]/label 全選/櫃檯
 const u = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(0).child('label') //櫃位
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div/div[2]/label
 const u1DOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(4).child('div').child('div')
 
 // ?! 人員
-// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[2]/label
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[4]/div[2]/label 人員
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div[1]/label 全選
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div[2]/div[1]/label 龍群測試
+// div/div[3]/div/div/div/div/div/div/div/div/div/div[1]/div/div[2]/div/div/section/div/div/div[5]/div/div[2]/div[9]/label 林芝羽
 const uu = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(3).child('div').nth(1).child('label') //人員
+const uuDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(4).child('div').child('div').nth(0).child('label') // 全選
+const uuBaseDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(0).child('div').child('div').nth(1).child('div').child('div').child('section').child('div').child('div').child('div').nth(4).child('div').child('div').nth(1) // 單選人員
 
 //! 明細 DOM
 const baseTotalDOM = Selector('#app').child('div').child('div').nth(2).child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').child('div').nth(1).child('div').nth(1).child('div').child('div') //掛號小計
@@ -117,9 +122,10 @@ fixture('結帳交班表')
       .click(receiptReportButton) // 進入結帳交班表
       .click(dateFromButton) // 點開日期
       .click(dateFromValue) // 指定日期 動態點選
+    console.log('-------單元測試開始--------')
   })
   .afterEach(async t => {
-    console.log('------功能-----')
+    // console.log('-------單元測試結束--------')
   })
   .before(async t => {
     console.log('------------------------------開始---------------------------------------')
@@ -248,7 +254,7 @@ test(`櫃位`, async t => {
     // API
     const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, u1Text)
     // console.log(get)
-    console.log(u1TextIndex, u1Text, await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
+    // console.log(u1TextIndex, u1Text, await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
     // 比對 預覽的合計＆小計值與 API 回傳值
     await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
     await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
@@ -260,7 +266,7 @@ test(`櫃位`, async t => {
 })
 
 // ! test.skip only 跳過此測試區域指令
-test.only(`人員`, async t => {
+test(`人員`, async t => {
   const accountingShiftIndex = -1 // 時段 DOM
   const groupRuleIndex = 0 // 資料群組
   const showGroupRuleIndex = 0 // 顯示方式
@@ -268,23 +274,39 @@ test.only(`人員`, async t => {
   const accountingShiftIds = accountingShift.filter(i => i !== accountingShift[accountingShiftIndex])
   const groupRule = baseGroupRuleDOM.child('div').nth(groupRuleIndex).child('label').child('span') // 資料群組
   const showGroupRule = showBaseGroupRuleDOM.child('div').child('div').nth(showGroupRuleIndex).child('label').child('span') // 顯示方式
-  await t
-    .click(uu) // 人員
-  await t
+  let uUserIndex = -1 // 人員對象 0~8
+  while (uUserIndex < 9) {
+    const uUser = uuBaseDOM.child('div').nth(uUserIndex).child('label') // 人員對象 0~8
+    await t.click(uu) // 人員
+    if (uUserIndex === 0) {
+      await t
+      .click(uuDOM) // 取消全選
+      .click(uUser) // 選人
+    }
+    if (uUserIndex >= 1) {
+      await t
+      .click(uuDOM) // 全選
+      .click(uuDOM) // 取消全選
+      .click(uUser) // 選人
+    }
+    await t
     .click(groupRule) // 資料群組 不設定
     .click(showGroupRule) // 顯示方式 明細
     .click(Button) // 預覽
     .wait(500)
-  // TODO: API確認
-  const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, '櫃檯')
-  console.log(get)
-  console.log(await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
-  // 比對 預覽的合計＆小計值與 API 回傳值
-  // await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
-  // await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
-  // await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
-  // await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
-  // await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    // TODO: API確認
+    const get = await receiptReportAPI(dateFromNumber, accountingShiftIds, groupRuleValue[groupRuleIndex], showGroupRuleValue, '人員', uUserIndex)
+    // console.log(uUserIndex, await uUser.innerText)
+    // console.log(get)
+    // console.log(await reportReportItemSummary.innerText, '【掛號批價】', get.reportReportItemSummary)
+    // 比對 預覽的合計＆小計值與 API 回傳值
+    await t.expect(await reportReportItemSummary.innerText).eql(`${get.reportReportItemSummary}`, '【掛號批價】小計值錯誤')
+    await t.expect(await receiptDepositItemSummary.innerText).eql(`${get.receiptDepositItemSummary}`, '【押金】小計值錯誤')
+    await t.expect(await receiptSelfBehalfItemSummary.innerText).eql(`${get.receiptSelfBehalfItemSummary}`, '【門診自費/代收】小計值錯誤')
+    await t.expect(await ecReportItemSummary.innerText).eql(`${get.ecReportItemSummary}`, '【自費購物】小計值錯誤')
+    await t.expect(await totalReceiptSummary.innerText).eql(`${get.totalReceiptSummary}`, '實收合計值錯誤')
+    uUserIndex++
+  }
 })
 
 // ! test.skip only ＝ 跳過此測試區域指令
